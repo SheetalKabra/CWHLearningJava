@@ -21,9 +21,8 @@ public class CWH_62_InterpreterCompiler {
 //    Hence java is platform independent.(write once run everywhere)
 // Executing java file
     //1. javac harry.java
-    //2. java harry.class
+    //2. java ClassName
 //for executing java, we need to add the java path into environment variables.
-
 
 
 }
