@@ -21,11 +21,11 @@ class MyRunnable2 implements Runnable{
 
 public class CWH_71_Runnable {
     public static void main(String[] args) {
-        MyRunnable1 r1 = new MyRunnable1();
-        Thread t1 = new Thread(r1);
+        MyRunnable1 bullet1 = new MyRunnable1();
+        Thread gun1 = new Thread(bullet1);
         MyRunnable2 r2 = new MyRunnable2();
         Thread t2 = new Thread(r2);
-        t1.start();
+        gun1.start();
         t2.start();
 
     }
