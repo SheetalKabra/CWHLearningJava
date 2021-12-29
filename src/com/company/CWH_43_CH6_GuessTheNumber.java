@@ -10,7 +10,7 @@ import java.util.Random;
 //        getter and setter for noOfGuesses
 //        Use properties such as noOfGuesses(int), etc to get this task done!
 class Game{
-    public static enum GameResult {
+    public enum GameResult {
         CORRECT, VERY_CLOSE, NEAR, FAR, VERY_FAR, OUTSIDE_RANGE;
     }
     private final int  randomNumber;
@@ -18,7 +18,7 @@ class Game{
     Game(){
         Random rand = new Random();
         this.randomNumber = rand.nextInt(100);
-        //System.out.println(this.randomNumber);
+        System.out.println(this.randomNumber);
     }
 
     public int takeUserInput(){
@@ -38,6 +38,7 @@ class Game{
             return GameResult.OUTSIDE_RANGE;
         }
         int difference = Math.abs(userInput - this.randomNumber);
+        //System.out.println("diff: "+ difference);
         if(difference == 0){
             return GameResult.CORRECT;
         } else if(difference >=80 ){
@@ -54,37 +55,47 @@ class Game{
 
 public class CWH_43_CH6_GuessTheNumber {
     public static void main(String[] args) {
-        Game g1 = new Game();
+        Game g1;
         int userInput;
         Game.GameResult isCorrectNumber;
-        int noOfChances = 0;
+        int noOfChances;
         char choice = 'y';
         Scanner scanner = new Scanner(System.in);
         do {
+            noOfChances = 0;
+            g1 = new Game();
             do {
                 userInput = g1.takeUserInput();
                 isCorrectNumber = g1.isCorrectNumber(userInput);
-                if (isCorrectNumber == Game.GameResult.OUTSIDE_RANGE) {
-                    System.out.println("Please enter the number in b/w 1-100");
-                } else if (isCorrectNumber == Game.GameResult.CORRECT) {
-                    System.out.println("Your guess is correct!!!");
-                } else if (isCorrectNumber == Game.GameResult.VERY_FAR) {
-                    System.out.println("you are very far away from number. Please try another chance");
-                } else if (isCorrectNumber == Game.GameResult.FAR) {
-                    System.out.println("you are far away from number. Please try another chance");
-                } else if (isCorrectNumber == Game.GameResult.NEAR) {
-                    System.out.println("you are near to number. Please try another chance");
-                } else if (isCorrectNumber == Game.GameResult.VERY_CLOSE) {
-                    System.out.println("you are very close to number. Please try another chance");
-                } else {
-                    System.out.println("Undefined error:" + isCorrectNumber);
+                switch(isCorrectNumber){
+                    case OUTSIDE_RANGE :
+                        System.out.println("Please enter the number in b/w 1-100");
+                        break;
+                    case CORRECT :
+                        System.out.println("Your guess is correct!!!");
+                        break;
+                    case VERY_FAR :
+                        System.out.println("you are very far away from number. Please try another chance");
+                        break;
+                    case FAR :
+                        System.out.println("you are far away from number. Please try another chance");
+                        break;
+                    case NEAR :
+                        System.out.println("you are near to number. Please try another chance");
+                        break;
+                    case VERY_CLOSE :
+                        System.out.println("you are very close to number. Please try another chance");
+                        break;
+                    default:
+                        System.out.println("Undefined error:" + isCorrectNumber);
+                        break;
                 }
                 noOfChances++;
             } while (isCorrectNumber != Game.GameResult.CORRECT);
             System.out.println("No of chances: " + noOfChances);
             System.out.println("Do you want to continue (y/n)");
             choice = scanner.next().charAt(0);
-            noOfChances = 0;
+
         } while (choice == 'y');
 
     }
