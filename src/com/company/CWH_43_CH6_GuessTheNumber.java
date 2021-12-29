@@ -11,21 +11,19 @@ import java.util.Random;
 //        Use properties such as noOfGuesses(int), etc to get this task done!
 class Game{
     public enum GameResult {
-        CORRECT, VERY_CLOSE, NEAR, FAR, VERY_FAR, OUTSIDE_RANGE;
+        CORRECT, VERY_CLOSE_EVEN, VERY_CLOSE_ODD, NEAR_UPWARDS, NEAR_DOWNWARDS, FAR, VERY_FAR, OUTSIDE_RANGE;
     }
     private final int  randomNumber;
-    private int userInput;
     Game(){
         Random rand = new Random();
         this.randomNumber = rand.nextInt(100);
-        System.out.println(this.randomNumber);
+        //System.out.println(this.randomNumber);
     }
 
     public int takeUserInput(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Please enter the number");
-        this.userInput = sc.nextInt();
-        return this.userInput;
+        return sc.nextInt();
     }
 
     public GameResult isCorrectNumber(int userInput){
@@ -46,56 +44,64 @@ class Game{
         } else if(difference >=40){
             return GameResult.FAR;
         } else if(difference >=10){
-            return GameResult.NEAR;
+            return this.randomNumber - userInput > 0 ?  GameResult.NEAR_UPWARDS : GameResult.NEAR_DOWNWARDS;
         } else {
-            return GameResult.VERY_CLOSE;
+            return this.randomNumber % 2 == 0 ? GameResult.VERY_CLOSE_EVEN : GameResult.VERY_CLOSE_ODD;
         }
+    }
+
+    public int playGame(){
+        Game.GameResult isCorrectNumber;
+        int noOfChances = 0;
+        do {
+            int userInput = takeUserInput();
+            isCorrectNumber = isCorrectNumber(userInput);
+            switch(isCorrectNumber){
+                case OUTSIDE_RANGE :
+                    System.out.println("Please enter the number in b/w 1-100");
+                    break;
+                case CORRECT :
+                    System.out.println("Your guess is correct!!!");
+                    break;
+                case VERY_FAR :
+                    System.out.println("you are very far away from number. Please try another chance");
+                    break;
+                case FAR :
+                    System.out.println("you are far away from number. Please try another chance");
+                    break;
+                case NEAR_UPWARDS :
+                    System.out.println("Go upwards, you are near to number. Please try another chance");
+                    break;
+                case NEAR_DOWNWARDS :
+                    System.out.println("Go downwards, you are near to number. Please try another chance");
+                    break;
+                case VERY_CLOSE_EVEN :
+                    System.out.println("No is even, you are very close to number. Please try another chance");
+                    break;
+                case VERY_CLOSE_ODD :
+                    System.out.println("No is odd, you are very close to number. Please try another chance");
+                    break;
+                default:
+                    System.out.println("Undefined error:" + isCorrectNumber);
+                    break;
+            }
+            noOfChances++;
+        } while (isCorrectNumber != Game.GameResult.CORRECT);
+        return noOfChances;
     }
 }
 
 public class CWH_43_CH6_GuessTheNumber {
     public static void main(String[] args) {
         Game g1;
-        int userInput;
-        Game.GameResult isCorrectNumber;
-        int noOfChances;
         char choice = 'y';
         Scanner scanner = new Scanner(System.in);
         do {
-            noOfChances = 0;
             g1 = new Game();
-            do {
-                userInput = g1.takeUserInput();
-                isCorrectNumber = g1.isCorrectNumber(userInput);
-                switch(isCorrectNumber){
-                    case OUTSIDE_RANGE :
-                        System.out.println("Please enter the number in b/w 1-100");
-                        break;
-                    case CORRECT :
-                        System.out.println("Your guess is correct!!!");
-                        break;
-                    case VERY_FAR :
-                        System.out.println("you are very far away from number. Please try another chance");
-                        break;
-                    case FAR :
-                        System.out.println("you are far away from number. Please try another chance");
-                        break;
-                    case NEAR :
-                        System.out.println("you are near to number. Please try another chance");
-                        break;
-                    case VERY_CLOSE :
-                        System.out.println("you are very close to number. Please try another chance");
-                        break;
-                    default:
-                        System.out.println("Undefined error:" + isCorrectNumber);
-                        break;
-                }
-                noOfChances++;
-            } while (isCorrectNumber != Game.GameResult.CORRECT);
-            System.out.println("No of chances: " + noOfChances);
+            int gameOp = g1.playGame();
+            System.out.println("No of chances: " + gameOp);
             System.out.println("Do you want to continue (y/n)");
             choice = scanner.next().charAt(0);
-
         } while (choice == 'y');
 
     }
